@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "project": "example.com",
+  "repository_path": "C:/Users/example/projects/example-saas",
+  "canonical_url": "https://www.example.com",
+  "current_phase": "scoring_et_selection",
+  "completed_phases": ["initialisation", "audit", "recherche_opportunites"],
+  "pending_phases": ["scoring_et_selection", "production_actif", "prospection", "outreach", "rapport"],
+  "blockers": [],
+  "selected_opportunity": null,
+  "files_created": [
+    ".citation-engine/project.json",
+    ".citation-engine/audit.md",
+    ".citation-engine/opportunities.csv"
+  ],
+  "opportunities_count": 12,
+  "rejected_opportunities_count": 3,
+  "prospects_count": 0,
+  "drafts_count": 0,
+  "started_at": "2026-07-15T09:00:00Z",
+  "updated_at": "2026-07-15T09:45:00Z",
+  "last_completed_at": "2026-07-15T09:45:00Z",
+  "last_error": null,
+  "next_action": "Scorer les 12 opportunités identifiées et sélectionner l'action P0."
+}

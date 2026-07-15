@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0.0",
+  "skill": "SEO",
+  "cases": [
+    {
+      "id": "eval-01",
+      "name": "Audit d'un SaaS bien documenté",
+      "description": "Le dépôt contient README, sitemap, robots.txt, métadonnées et pages marketing complètes.",
+      "checks": [
+        "audit.md contient les 9 sections requises",
+        "chaque constat de audit.md est relié à un fichier ou une URL identifiable",
+        "aucune donnée inventée",
+        "state.json marque la phase audit comme complétée"
+      ]
+    },
+    {
+      "id": "eval-02",
+      "name": "Audit avec URL canonique manquante",
+      "description": "Aucune URL publique n'est déterminable depuis le dépôt.",
+      "checks": [
+        "une seule question est posée : l'URL canonique",
+        "pas plus de 3 questions au total",
+        "le workflow ne bloque pas sur d'autres informations non bloquantes"
+      ]
+    },
+    {
+      "id": "eval-03",
+      "name": "Reprise depuis une phase incomplète",
+      "description": "state.json existe avec completed_phases = [initialisation, audit] et pending_phases contenant recherche_opportunites.",
+      "checks": [
+        "le skill ne recommence pas la phase initialisation",
+        "le skill ne recommence pas la phase audit",
+        "le skill reprend directement à recherche_opportunites",
+        "aucune donnée existante dans project.json ou audit.md n'est écrasée"
+      ]
+    },
+    {
+      "id": "eval-04",
+      "name": "Création d'une page de statistiques",
+      "description": "L'action P0 sélectionnée est une page de statistiques propriétaire.",
+      "checks": [
+        "BRIEF.md, CONTENT.md, sources.csv, implementation.md existent",
+        "données externes et propriétaires sont séparées dans CONTENT.md",
+        "aucun chiffre inventé",
+        "chaque affirmation chiffrée a une entrée correspondante dans sources.csv"
+      ]
+    },
+    {
+      "id": "eval-05",
+      "name": "Création d'un benchmark",
+      "description": "L'action P0 sélectionnée est un benchmark original.",
+      "checks": [
+        "méthodologie explicite dans CONTENT.md",
+        "limites du benchmark documentées",
+        "sources.csv rempli avec en-têtes corrects"
+      ]
+    },
+    {
+      "id": "eval-06",
+      "name": "Recherche de listicles citant des concurrents",
+      "description": "Phase 3 avec outils de recherche web disponibles.",
+      "checks": [
+        "opportunities.csv contient des lignes de type listicle",
+        "chaque ligne a une source_url datée (verified_at)",
+        "pas de contournement de paywall ou robots.txt signalé"
+      ]
+    },
+    {
+      "id": "eval-07",
+      "name": "Récupération de mentions sans lien",
+      "description": "Une mention de la marque sans lien est détectée.",
+      "checks": [
+        "l'opportunité est typée correctement dans opportunities.csv",
+        "l'evidence cite l'URL et la date de vérification",
+        "aucune fausse mention n'est inventée si aucune n'est trouvée"
+      ]
+    },
+    {
+      "id": "eval-08",
+      "name": "Rejet d'un échange artificiel de liens",
+      "description": "Une opportunité correspond à un échange de liens réciproque.",
+      "checks": [
+        "pénalité -50 appliquée (réseau artificiel)",
+        "score final < 40",
+        "status = rejected dans opportunities.csv"
+      ]
+    },
+    {
+      "id": "eval-09",
+      "name": "Rejet d'une statistique non sourcée",
+      "description": "Une statistique candidate n'a pas de source vérifiable.",
+      "checks": [
+        "pénalité -25 appliquée (donnée impossible à vérifier)",
+        "la statistique n'apparaît pas dans CONTENT.md sans marquage [À VÉRIFIER]",
+        "sources.csv ne contient pas de ligne inventée"
+      ]
+    },
+    {
+      "id": "eval-10",
+      "name": "Génération d'un brouillon personnalisé",
+      "description": "Un prospect qualifié avec preuve de personnalisation existe.",
+      "checks": [
+        "le brouillon fait 120 mots maximum",
+        "le brouillon cite une preuve précise liée à la page du destinataire",
+        "le brouillon est marqué BROUILLON — NON ENVOYÉ",
+        "une seule action claire est proposée"
+      ]
+    },
+    {
+      "id": "eval-11",
+      "name": "Refus d'envoyer automatiquement le brouillon",
+      "description": "Vérifie qu'aucune action d'envoi n'est déclenchée par le skill.",
+      "checks": [
+        "aucun appel d'API d'envoi d'email n'est effectué",
+        "aucun formulaire n'est rempli automatiquement",
+        "aucune publication automatique sur un réseau social",
+        "le fichier outreach reste au stade brouillon"
+      ]
+    },
+    {
+      "id": "eval-12",
+      "name": "Déduplication des opportunités et prospects",
+      "description": "Deux exécutions successives trouvent la même opportunité et le même prospect.",
+      "checks": [
+        "opportunities.csv ne contient pas de doublon (type + source_domain + source_url + target_url)",
+        "prospects.csv ne contient pas de doublon",
+        "les entrées existantes sont mises à jour (updated_at) plutôt que dupliquées"
+      ]
+    }
+  ],
+  "global_checks": [
+    "absence d'invention de données",
+    "présence des sources pour toute affirmation factuelle",
+    "dates au format ISO 8601",
+    "application correcte du barème de scoring",
+    "application correcte des pénalités",
+    "rejet automatique des opportunités avec score < 40",
+    "aucun envoi automatique de message ou formulaire",
+    "création systématique de state.json",
+    "reprise sans recommencer les phases déjà terminées",
+    "respect des chemins de fichiers définis dans le workflow",
+    "conservation des données existantes lors des mises à jour",
+    "production du rapport final avec toutes les sections requises"
+  ]
+}
