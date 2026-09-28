@@ -2,6 +2,8 @@
 name: SEO
 description: Moteur autonome SEO, GEO, digital PR, contenus citables, backlinks éditoriaux, listicles, comparatifs, mentions sans lien et prospection pour SaaS. À utiliser manuellement avec /SEO pour auditer un projet, rechercher et scorer les opportunités, produire un actif citable, trouver des prospects et préparer des brouillons d'outreach.
 disable-model-invocation: true
+metadata:
+  version: 1.1.0
 ---
 
 # SEO
@@ -33,9 +35,9 @@ Ne jamais inventer une donnée manquante. Utiliser `null`, `[]`, ou la chaîne `
 2. **Audit** — analyser produit, technique, éditorial → `audit.md`. Détail : [references/workflow.md](references/workflow.md#phase-2)
 3. **Recherche d'opportunités** — listicles, comparatifs, mentions sans lien, liens cassés, besoins journalistiques → `opportunities.csv`. Détail : [references/workflow.md](references/workflow.md#phase-3)
 4. **Scoring et sélection** — noter chaque opportunité sur 100, rejeter < 40, choisir UNE action P0. Barème complet : [references/scoring.md](references/scoring.md)
-5. **Production de l'actif citable** — brief, contenu, sources, plan d'implémentation dans `assets/<slug>/`. Schémas : [references/output-schemas.md](references/output-schemas.md)
+5. **Production de l'actif citable** — brief, contenu, sources, plan d'implémentation dans `assets/<slug>/`. Schémas : [references/output-schemas.md](references/output-schemas.md). Rédaction du contenu : skill `redaction` s'il est installé.
 6. **Prospection** — `prospects.csv`, uniquement des cibles avec raison éditoriale réelle et preuve de personnalisation.
-7. **Brouillons d'outreach** — `outreach/<date>.md`, jamais envoyés automatiquement.
+7. **Brouillons d'outreach** — `outreach/<date>.md`, jamais envoyés automatiquement. Rédaction et relecture : skill `redaction` s'il est installé.
 8. **Rapport** — `reports/<date>.md`, synthèse et prochaine action unique.
 
 Workflow détaillé (contenu exact de chaque phase, fichiers, critères de complétion) : [references/workflow.md](references/workflow.md).
@@ -44,6 +46,7 @@ Workflow détaillé (contenu exact de chaque phase, fichiers, critères de compl
 
 - Pas de PBN, pas d'achat de lien dofollow, pas d'échange massif de liens, pas de réseau automatique entre les SaaS de l'utilisateur.
 - Pas de faux avis, fausse citation, fausse statistique, fausse identité.
+- Textes destinés à un lecteur (actif citable, brouillons d'outreach) : aucun tiret cadratin, aucun émoji, relecture séparée avant de les proposer ; règles détaillées dans le skill `redaction` ([claude-skill-redaction](https://github.com/RAAAAAGEEEEE/claude-skill-redaction)).
 - Pas de génération massive de pages quasi identiques, pas de spam email/formulaire.
 - Pas de contournement de connexion, paywall, robots.txt ou anti-bot.
 - Un lien entre deux projets de l'utilisateur n'est recommandé que s'il est utile au lecteur, contextuellement pertinent, et existerait même sans objectif SEO.
