@@ -1,6 +1,6 @@
 # Workflow détaillé — SEO
 
-Ce fichier détaille les 8 phases exécutées par `/SEO`. Voir [SKILL.md](../SKILL.md) pour le résumé et les principes d'exécution globaux.
+Ce fichier détaille les 8 phases exécutées par `/seo`. Voir [SKILL.md](../SKILL.md) pour le résumé et les principes d'exécution globaux.
 
 ## Reprise
 
@@ -103,7 +103,7 @@ Créer `.citation-engine/assets/<slug>/` avec au minimum :
 - `sources.csv` (en-têtes : voir [output-schemas.md](output-schemas.md#sourcescsv))
 - `implementation.md`
 
-Contenu selon le type d'actif (voir [output-schemas.md](output-schemas.md#assets) pour le détail complet) : title, meta description, slug, H1, structure H2/H3, intro, contenu principal, tableaux, méthodologie, limites, auteur/organisation, dates de publication/mise à jour, CTA, plan de maillage interne, JSON-LD si applicable, plan de maintenance, fréquence de mise à jour, éléments visuels recommandés, facteurs de citabilité.
+Contenu selon le type d'actif (voir [output-schemas.md](output-schemas.md#assets-citation-engineassetsslug) pour le détail complet) : title, meta description, slug, H1, structure H2/H3, intro, contenu principal, tableaux, méthodologie, limites, auteur/organisation, dates de publication/mise à jour, CTA, plan de maillage interne, JSON-LD si applicable, plan de maintenance, fréquence de mise à jour, éléments visuels recommandés, facteurs de citabilité.
 
 Pour pages de statistiques/études/benchmarks/datasets : séparer données externes et propriétaires, méthodologie précise, jamais de chiffre inventé ou extrapolé sans le signaler, chaque source documentée dans `sources.csv`.
 
@@ -149,4 +149,4 @@ Phase terminée quand le rapport du jour existe et que `state.json.completed_pha
 4. vérifier qu'il est lisible ;
 5. mettre à jour `state.json` en dernier.
 
-En cas d'erreur : enregistrer dans `last_error`, conserver les phases déjà terminées, indiquer le blocage, permettre la reprise via `/SEO`.
+En cas d'erreur : enregistrer dans `last_error`, conserver les phases déjà terminées, indiquer le blocage, permettre la reprise via `/seo`.

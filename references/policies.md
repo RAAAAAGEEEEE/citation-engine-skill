@@ -33,7 +33,7 @@ Le skill doit :
 
 ## Liens entre les SaaS de l'utilisateur
 
-Un lien entre deux projets de l'utilisateur (ex. un SaaS, un site d'actualité, une application mobile) ne peut être recommandé que si toutes ces conditions sont réunies :
+Un lien entre deux projets de l'utilisateur (ex. deux produits SaaS d'un même éditeur) ne peut être recommandé que si toutes ces conditions sont réunies :
 
 - il est directement utile au lecteur ;
 - il est contextuellement pertinent ;

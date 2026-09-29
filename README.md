@@ -1,60 +1,147 @@
-# SEO
+# seo (citation-engine-skill)
 
-Moteur SEO/GEO/digital PR autonome pour solopreneur gérant plusieurs SaaS. Améliore la visibilité Google Search, l'éligibilité aux AI Overviews/AI Mode, les citations dans Gemini/ChatGPT/Perplexity, les mentions éditoriales et backlinks pertinents, et la présence dans les comparatifs/listicles — sans fabrique à backlinks, sans spam, sans réseau artificiel entre projets.
+Skill Claude Code qui aide un développeur indépendant à gagner de la visibilité
+**hors de son site** : audit du projet, recherche d'opportunités (listicles,
+comparatifs, mentions sans lien, liens cassés), production d'un actif citable,
+prospects qualifiés et brouillons d'outreach. Une seule commande : `/seo`.
 
-**Emplacement absolu :** `~/.claude/skills/SEO/`
+**Statut : bêta.** Version 1.2.0 ([CHANGELOG.md](CHANGELOG.md)). Utilisé sur
+quelques projets réels. Les 12 cas d'évaluation ([evals/evals.json](evals/evals.json))
+décrivent le comportement attendu mais ne s'exécutent pas automatiquement ;
+seul `scripts/check_outputs.py` est testé (7 tests hors ligne).
 
-## Lancer le skill
+## Le problème
+Publier une bonne page ne suffit pas : Google et les moteurs de réponse IA la
+citent surtout si d'autres sites sérieux la mentionnent. Le travail (trouver
+les listicles qui oublient votre produit, vérifier chaque source, écrire un
+message qui ne ressemble pas à du spam) est long, et la tentation du raccourci
+(échange de liens, chiffre inventé) est grande.
 
-Depuis n'importe quel dépôt de SaaS, dans Claude Code :
+## Pour qui
+Développeurs et fondateurs qui gèrent un ou plusieurs SaaS ou sites de contenu,
+sans équipe marketing, et qui travaillent déjà avec Claude Code.
 
+## Ce que le skill apporte
+- **Un cycle en 8 phases, reprenable** : initialisation, audit, opportunités,
+  scoring, actif citable, prospection, brouillons, rapport. L'état est dans
+  `.citation-engine/state.json` : `/seo` reprend où il s'est arrêté.
+- **Un score sur 100, avec pénalités** : une opportunité sous 40 est rejetée,
+  un échange de liens ou un site spammy est écarté d'office
+  ([references/scoring.md](references/scoring.md)).
+- **Aucune donnée inventée** : `null`, `[]` ou `[À VÉRIFIER : ...]` plutôt
+  qu'un chiffre plausible ; chaque affirmation chiffrée renvoie à une ligne de
+  `sources.csv`.
+- **Jamais d'envoi** : les brouillons portent `BROUILLON — NON ENVOYÉ`. Le
+  skill ne publie rien et ne touche pas au code du site.
+
+## Exemple de sortie
+Fin d'une exécution sur un projet fictif (illustratif, pas une mesure) :
 ```
-/SEO
+Phase atteinte : rapport (8/8)
+Action P0 sélectionnée : page de statistiques propriétaire « Rendez-vous manqués chez les artisans » (score 82)
+Fichiers produits : .citation-engine/assets/stats-rdv-artisans/{BRIEF.md,CONTENT.md,sources.csv,implementation.md},
+  .citation-engine/outreach/2026-09-29.md (3 brouillons, BROUILLON — NON ENVOYÉ), reports/2026-09-29.md
+Blocage éventuel : aucun ; 2 statistiques marquées [À VÉRIFIER] dans CONTENT.md
+Prochaine action : publier l'actif (plan dans implementation.md), puis relancer /seo pour le suivi
+```
+Des fichiers d'exemple complets (fictifs) sont dans [assets/](assets/).
+
+## Prérequis
+- Claude Code, avec accès au dépôt du projet à traiter.
+- Un outil de recherche web pour la phase 3 (sans lui, le skill continue avec
+  les données locales et le dit).
+- Python 3.10+ seulement pour `scripts/check_outputs.py` (bibliothèque standard).
+
+## Installation
+```bash
+git clone https://github.com/RAAAAAGEEEEE/citation-engine-skill.git ~/.claude/skills/seo
+```
+Pour un seul projet : `.claude/skills/seo/` à la racine du projet. Détail :
+[docs/INSTALLATION.md](docs/INSTALLATION.md).
+
+## Démarrage rapide
+1. Ouvrir Claude Code dans le dépôt du projet.
+2. Lancer `/seo`.
+3. Répondre aux éventuelles questions bloquantes (3 maximum).
+4. Relancer `/seo` après toute interruption.
+
+Contrôler ensuite les fichiers produits (depuis le dossier du skill) :
+```bash
+python scripts/check_outputs.py /chemin/vers/le/projet/.citation-engine
 ```
 
-1. Ouvrir Claude Code dans le dépôt du SaaS.
-2. Lancer `/SEO`.
-3. Répondre uniquement si des informations bloquantes sont demandées (3 questions maximum).
-4. Laisser le skill dérouler les 8 phases automatiquement.
-5. Relancer `/SEO` après toute interruption — il reprend à la première phase incomplète.
+## Exemple minimal
+Contrôler les fichiers d'exemple fournis, depuis le dossier du skill :
+```bash
+python scripts/check_outputs.py assets/state.example.json assets/opportunities.example.csv
+```
+Sortie attendue (exécutée sous Windows le 2026-09-29 ; sous Linux et macOS
+les chemins s'affichent avec `/`) :
+```
+OK   assets\state.example.json
+OK   assets\opportunities.example.csv
+2/2 fichier(s) valide(s)
+```
 
-Une seule commande existe. Il n'y a pas de sous-commandes (`audit`, `plan`, `prospects`, etc.) — le skill détermine seul la phase suivante à partir de `.citation-engine/state.json`.
+## Architecture
+- `SKILL.md` : la procédure suivie par Claude.
+- `references/` : workflow détaillé, barème, politiques, qualité des sources,
+  schémas.
+- `assets/` : gabarits et exemples fictifs.
+- `scripts/check_outputs.py` : contrôle des fichiers produits.
+- `evals/` et `tests/` : cas d'évaluation et tests.
 
-## Où sont enregistrés les résultats
+Détail : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-Dans le dépôt courant, sous `.citation-engine/` :
+## Configuration
+Aucune : pas de variable d'environnement, pas de clé, pas de compte. Le seul
+réglage est propre au projet, dans `.citation-engine/project.json` (domaines à
+exclure, validation humaine de l'outreach). Voir
+[docs/CONFIGURATION.md](docs/CONFIGURATION.md).
 
-- `state.json` — état d'avancement, reprise
-- `project.json` — fiche projet
-- `audit.md` — audit SEO/GEO
-- `opportunities.csv` — opportunités scorées
-- `prospects.csv` — prospects qualifiés
-- `assets/<slug>/` — actif citable produit (brief, contenu, sources, plan d'implémentation)
-- `outreach/<date>.md` — brouillons d'outreach
-- `reports/<date>.md` — rapports de synthèse
+## Sécurité et confidentialité
+Le skill lit le dépôt courant et, avec un outil de recherche web, des pages
+publiques. Il n'envoie ni e-mail, ni formulaire, ni publication, et n'appelle
+aucune API payante. Les données de prospection restent dans `.citation-engine/`
+(à ne pas publier). Voir [SECURITY.md](SECURITY.md) et
+[docs/PRIVACY_AND_SECURITY.md](docs/PRIVACY_AND_SECURITY.md).
 
-## Ce que le skill ne fait jamais automatiquement
+## Compatibilité
+Le front-matter de [SKILL.md](SKILL.md) suit le format ouvert des Agent Skills
+(`name`, `description`, `license`, `compatibility`, `metadata`). Un seul champ
+est propre à Claude Code : `disable-model-invocation: true`. Il empêche Claude
+de déclencher le skill de lui-même : il ne s'exécute que sur `/seo`. Il est
+indispensable ici, car le skill enchaîne 8 phases et écrit dans le dépôt. Les
+agents qui ne connaissent pas ce champ l'ignorent et pourraient charger le
+skill de leur propre initiative.
 
-- envoyer un email, un message ou un formulaire ;
-- publier du contenu en ligne ;
-- modifier le code applicatif du dépôt ;
-- créer un commit Git ;
-- acheter un lien ou proposer un échange de liens ;
-- inventer une statistique, une citation, un contact ou une identité ;
-- garantir un résultat SEO, un backlink ou une citation IA.
+Skill compagnon : [seo-geo-optimizer](https://github.com/RAAAAAGEEEEE/claude-skill-seo-geo-optimizer)
+(audit technique et corrections dans le code du site).
 
-Voir [references/policies.md](references/policies.md) pour le détail des garde-fous.
+## Limites
+- Aucune garantie de backlink, de citation IA ou de gain de trafic.
+- Pas de mesure directe des citations dans ChatGPT, Gemini ou Perplexity.
+- La recherche dépend de l'outil web disponible : pages en 403, derrière un
+  paywall ou rendues en JavaScript = « non vérifié ».
+- Pas d'envoi, donc pas de suivi des réponses : le suivi des résultats est
+  manuel.
+- Les évaluations ne sont pas exécutées automatiquement.
 
-## Réinitialiser un projet
+Liste complète : [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
 
-Ne jamais supprimer `.citation-engine/state.json` directement. À la place :
+## Feuille de route (non contractuelle)
+- Exécuter les évaluations automatiquement avec le skill-creator d'Anthropic.
+- Étendre `check_outputs.py` (dates ISO 8601, cohérence entre exécutions).
 
-1. sauvegarder le fichier (copie) ;
-2. le renommer, par exemple `state.json.bak-<date>` ;
-3. relancer `/SEO`, qui initialisera un nouveau workflow.
+## Contribution
+Voir [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Les autres fichiers (`audit.md`, `opportunities.csv`, etc.) sont fusionnés avec les données existantes lors des prochains lancements, pas écrasés.
+## Licence
+MIT, voir [LICENSE](LICENSE).
 
-## Références
-
-Voir [SKILL.md](SKILL.md) pour le détail des 8 phases, du scoring, des schémas de sortie et des politiques appliquées.
+## Documentation
+- [SKILL.md](SKILL.md) : la procédure.
+- [docs/](docs/) : installation, usage, configuration, architecture,
+  dépannage, limites, sécurité, attributions.
+- [references/](references/) : workflow, scoring, politiques, sources, schémas.
+- [CHANGELOG.md](CHANGELOG.md) : les versions.

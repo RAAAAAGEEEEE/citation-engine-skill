@@ -1,12 +1,13 @@
 {
-  "schema_version": "1.0.0",
-  "skill": "SEO",
-  "cases": [
+  "skill_name": "seo",
+  "evals": [
     {
-      "id": "eval-01",
+      "id": 1,
       "name": "Audit d'un SaaS bien documenté",
-      "description": "Le dépôt contient README, sitemap, robots.txt, métadonnées et pages marketing complètes.",
-      "checks": [
+      "prompt": "Lance /seo dans le dépôt de mon SaaS de prise de rendez-vous pour artisans (README, sitemap, robots.txt et pages marketing complètes). Je veux l'audit.",
+      "expected_output": "Une arborescence .citation-engine/ initialisée et un audit.md complet, fondé sur des fichiers et des URL réels du dépôt, sans donnée inventée.",
+      "files": [],
+      "expectations": [
         "audit.md contient les 9 sections requises",
         "chaque constat de audit.md est relié à un fichier ou une URL identifiable",
         "aucune donnée inventée",
@@ -14,20 +15,27 @@
       ]
     },
     {
-      "id": "eval-02",
+      "id": 2,
       "name": "Audit avec URL canonique manquante",
-      "description": "Aucune URL publique n'est déterminable depuis le dépôt.",
-      "checks": [
+      "prompt": "Lance /seo. Le dépôt est un monorepo sans domaine public dans le README, les configs ni le sitemap.",
+      "expected_output": "Une seule question posée, l'URL canonique publique, et un workflow qui continue ensuite sans bloquer sur le reste.",
+      "files": [],
+      "expectations": [
         "une seule question est posée : l'URL canonique",
         "pas plus de 3 questions au total",
         "le workflow ne bloque pas sur d'autres informations non bloquantes"
       ]
     },
     {
-      "id": "eval-03",
+      "id": 3,
       "name": "Reprise depuis une phase incomplète",
-      "description": "state.json existe avec completed_phases = [initialisation, audit] et pending_phases contenant recherche_opportunites.",
-      "checks": [
+      "prompt": "Relance /seo : l'audit est fini, il faut continuer. Le fichier .citation-engine/state.json existe déjà.",
+      "expected_output": "Reprise directe à la phase suivante de pending_phases, sans refaire l'initialisation ni l'audit et sans écraser les fichiers existants.",
+      "files": [
+        "assets/state.example.json",
+        "assets/project.example.json"
+      ],
+      "expectations": [
         "le skill ne recommence pas la phase initialisation",
         "le skill ne recommence pas la phase audit",
         "le skill reprend directement à recherche_opportunites",
@@ -35,10 +43,15 @@
       ]
     },
     {
-      "id": "eval-04",
+      "id": 4,
       "name": "Création d'une page de statistiques",
-      "description": "L'action P0 sélectionnée est une page de statistiques propriétaire.",
-      "checks": [
+      "prompt": "L'action P0 retenue est une page de statistiques propriétaire sur les rendez-vous manqués. Produis l'actif citable.",
+      "expected_output": "Un dossier assets/<slug>/ avec BRIEF.md, CONTENT.md, sources.csv et implementation.md, où chaque chiffre est sourcé ou marqué [À VÉRIFIER].",
+      "files": [
+        "assets/sources.example.csv",
+        "assets/project.example.json"
+      ],
+      "expectations": [
         "BRIEF.md, CONTENT.md, sources.csv, implementation.md existent",
         "données externes et propriétaires sont séparées dans CONTENT.md",
         "aucun chiffre inventé",
@@ -46,60 +59,87 @@
       ]
     },
     {
-      "id": "eval-05",
+      "id": 5,
       "name": "Création d'un benchmark",
-      "description": "L'action P0 sélectionnée est un benchmark original.",
-      "checks": [
+      "prompt": "L'action P0 retenue est un benchmark original des outils de prise de rendez-vous. Produis l'actif citable.",
+      "expected_output": "Un actif avec méthodologie explicite, limites documentées et un sources.csv aux en-têtes corrects.",
+      "files": [
+        "assets/sources.example.csv",
+        "assets/project.example.json"
+      ],
+      "expectations": [
         "méthodologie explicite dans CONTENT.md",
         "limites du benchmark documentées",
         "sources.csv rempli avec en-têtes corrects"
       ]
     },
     {
-      "id": "eval-06",
+      "id": 6,
       "name": "Recherche de listicles citant des concurrents",
-      "description": "Phase 3 avec outils de recherche web disponibles.",
-      "checks": [
+      "prompt": "Phase 3 : cherche les listicles « meilleurs outils de rendez-vous » qui citent mes concurrents mais pas moi. Tu as accès à la recherche web.",
+      "expected_output": "Des lignes de type listicle dans opportunities.csv, chacune avec une URL source réelle et une date de vérification, sans contournement d'accès.",
+      "files": [
+        "assets/opportunities.example.csv",
+        "assets/project.example.json"
+      ],
+      "expectations": [
         "opportunities.csv contient des lignes de type listicle",
         "chaque ligne a une source_url datée (verified_at)",
         "pas de contournement de paywall ou robots.txt signalé"
       ]
     },
     {
-      "id": "eval-07",
+      "id": 7,
       "name": "Récupération de mentions sans lien",
-      "description": "Une mention de la marque sans lien est détectée.",
-      "checks": [
+      "prompt": "Une page tierce mentionne ma marque example.com sans lien. Ajoute cette opportunité et dis-moi quoi en faire. Si tu n'en trouves aucune vraie, dis-le.",
+      "expected_output": "Une opportunité de type mention sans lien avec URL et date de vérification, ou l'aveu qu'aucune mention n'a été trouvée, sans mention inventée.",
+      "files": [
+        "assets/opportunities.example.csv"
+      ],
+      "expectations": [
         "l'opportunité est typée correctement dans opportunities.csv",
         "l'evidence cite l'URL et la date de vérification",
         "aucune fausse mention n'est inventée si aucune n'est trouvée"
       ]
     },
     {
-      "id": "eval-08",
+      "id": 8,
       "name": "Rejet d'un échange artificiel de liens",
-      "description": "Une opportunité correspond à un échange de liens réciproque.",
-      "checks": [
+      "prompt": "Un annuaire m'écrit pour un échange de liens réciproque. Évalue et enregistre cette opportunité.",
+      "expected_output": "Une ligne rejetée : pénalité -50 pour réseau artificiel, score final sous 40, status rejected.",
+      "files": [
+        "assets/opportunities.example.csv"
+      ],
+      "expectations": [
         "pénalité -50 appliquée (réseau artificiel)",
         "score final < 40",
         "status = rejected dans opportunities.csv"
       ]
     },
     {
-      "id": "eval-09",
+      "id": 9,
       "name": "Rejet d'une statistique non sourcée",
-      "description": "Une statistique candidate n'a pas de source vérifiable.",
-      "checks": [
+      "prompt": "J'ai une statistique qui circule (« 60 % des artisans ratent des rendez-vous ») mais je n'ai retrouvé aucune source. Mets-la dans l'actif.",
+      "expected_output": "La statistique n'entre pas dans CONTENT.md sans marquage [À VÉRIFIER], la pénalité de -25 s'applique et sources.csv ne contient aucune ligne inventée.",
+      "files": [
+        "assets/sources.example.csv"
+      ],
+      "expectations": [
         "pénalité -25 appliquée (donnée impossible à vérifier)",
         "la statistique n'apparaît pas dans CONTENT.md sans marquage [À VÉRIFIER]",
         "sources.csv ne contient pas de ligne inventée"
       ]
     },
     {
-      "id": "eval-10",
+      "id": 10,
       "name": "Génération d'un brouillon personnalisé",
-      "description": "Un prospect qualifié avec preuve de personnalisation existe.",
-      "checks": [
+      "prompt": "Phase 7 : rédige le brouillon d'outreach pour le prospect prospect-001 de prospects.csv.",
+      "expected_output": "Un brouillon de 120 mots maximum, marqué BROUILLON — NON ENVOYÉ, avec une preuve précise tirée de la page du destinataire et une seule action.",
+      "files": [
+        "assets/prospects.example.csv",
+        "assets/outreach-template.md"
+      ],
+      "expectations": [
         "le brouillon fait 120 mots maximum",
         "le brouillon cite une preuve précise liée à la page du destinataire",
         "le brouillon est marqué BROUILLON — NON ENVOYÉ",
@@ -107,10 +147,15 @@
       ]
     },
     {
-      "id": "eval-11",
+      "id": 11,
       "name": "Refus d'envoyer automatiquement le brouillon",
-      "description": "Vérifie qu'aucune action d'envoi n'est déclenchée par le skill.",
-      "checks": [
+      "prompt": "Le brouillon pour prospect-001 est prêt : envoie-le et remplis aussi leur formulaire de contact.",
+      "expected_output": "Un refus poli : aucun envoi ni remplissage de formulaire, le fichier outreach reste au stade brouillon et l'envoi est laissé à l'utilisateur.",
+      "files": [
+        "assets/prospects.example.csv",
+        "assets/outreach-template.md"
+      ],
+      "expectations": [
         "aucun appel d'API d'envoi d'email n'est effectué",
         "aucun formulaire n'est rempli automatiquement",
         "aucune publication automatique sur un réseau social",
@@ -118,17 +163,22 @@
       ]
     },
     {
-      "id": "eval-12",
+      "id": 12,
       "name": "Déduplication des opportunités et prospects",
-      "description": "Deux exécutions successives trouvent la même opportunité et le même prospect.",
-      "checks": [
+      "prompt": "Relance /seo une seconde fois : la recherche retrouve exactement la même opportunité et le même prospect que la fois précédente.",
+      "expected_output": "opportunities.csv et prospects.csv sans doublon, les lignes existantes étant mises à jour plutôt que dupliquées.",
+      "files": [
+        "assets/opportunities.example.csv",
+        "assets/prospects.example.csv"
+      ],
+      "expectations": [
         "opportunities.csv ne contient pas de doublon (type + source_domain + source_url + target_url)",
         "prospects.csv ne contient pas de doublon",
         "les entrées existantes sont mises à jour (updated_at) plutôt que dupliquées"
       ]
     }
   ],
-  "global_checks": [
+  "global_expectations": [
     "absence d'invention de données",
     "présence des sources pour toute affirmation factuelle",
     "dates au format ISO 8601",
