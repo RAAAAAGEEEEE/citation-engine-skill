@@ -10,6 +10,22 @@ quelques projets réels. Les 12 cas d'évaluation ([evals/evals.json](evals/eval
 décrivent le comportement attendu mais ne s'exécutent pas automatiquement ;
 seul `scripts/check_outputs.py` est testé (7 tests hors ligne).
 
+## Comment ça marche
+
+Pour un débutant, trois gestes, et aucun copier-coller du dépôt dans la conversation :
+
+1. **Installer le skill une fois** : `git clone https://github.com/RAAAAAGEEEEE/citation-engine-skill ~/.claude/skills/seo`
+   (disponible dans tous vos projets), ou le même clone dans `.claude/skills/seo` à la racine d'un
+   projet (disponible dans ce projet seulement). Sous Windows PowerShell, remplacez `~` par
+   `$env:USERPROFILE`. Détail : [docs/INSTALLATION.md](docs/INSTALLATION.md).
+2. **Le demander** : ce skill se lance **uniquement à la main** (`disable-model-invocation: true`) : depuis le dépôt de votre SaaS, tapez `/seo`, éventuellement suivi de votre demande en langage naturel (« /seo trouve des comparatifs où mon produit devrait être cité »).
+3. **Se laisser guider** : Claude audite le projet, cherche et note des opportunités, produit l'actif citable et les brouillons d'outreach, sans jamais rien envoyer.
+
+C'est le fonctionnement de tous les skills Claude Code : un dossier avec un `SKILL.md` placé dans
+`~/.claude/skills/<nom>/` (personnel) ou `.claude/skills/<nom>/` (projet) ; Claude le charge
+automatiquement quand votre demande correspond à sa `description` (sauf ce skill-ci, réservé à `/seo`), et `/<nom>` le lance à la main.
+[officiel : [skills](https://code.claude.com/docs/en/skills#where-skills-live), page consultée le 2026-10-05]
+
 ## Le problème
 Publier une bonne page ne suffit pas : Google et les moteurs de réponse IA la
 citent surtout si d'autres sites sérieux la mentionnent. Le travail (trouver
