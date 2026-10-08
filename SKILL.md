@@ -1,6 +1,7 @@
 ---
 name: seo
-description: Moteur autonome SEO, GEO et digital PR pour SaaS : audite un projet, cherche et note des opportunités (listicles, comparatifs, mentions sans lien, liens cassés, besoins journalistiques), produit un actif citable (brief, contenu, sources, plan d'implémentation), qualifie des prospects et rédige des brouillons d'outreach sans jamais les envoyer. À lancer manuellement avec /seo dans le dépôt d'un projet. Ne modifie ni le code du site ni les comptes ; pour l'audit technique du site lui-même, voir le skill compagnon seo-geo-optimizer.
+description: >-
+  Moteur autonome SEO, GEO et digital PR pour SaaS : audite un projet, cherche et note des opportunités (listicles, comparatifs, mentions sans lien, liens cassés, besoins journalistiques), produit un actif citable (brief, contenu, sources, plan d'implémentation), qualifie des prospects et rédige des brouillons d'outreach sans jamais les envoyer. À lancer manuellement avec /seo dans le dépôt d'un projet. Ne modifie ni le code du site ni les comptes ; pour l'audit technique du site lui-même, voir le skill compagnon seo-geo-optimizer.
 disable-model-invocation: true
 license: MIT
 compatibility: Aucun runtime requis pour le skill. Conçu pour Claude Code (le champ disable-model-invocation est propre à Claude Code). La phase de recherche d'opportunités demande un outil de recherche web ; sans lui le skill continue avec les données locales. Python 3.10+ uniquement pour scripts/check_outputs.py.
